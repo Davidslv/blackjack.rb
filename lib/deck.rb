@@ -1,17 +1,16 @@
-require 'card'
-
 class Deck
-  # Deck class is responsible for:
-  #  - Generate a new deck (build deck)
-  #  - Deals cards to each player in game
-  #  - shuffles deck
-  #
+  SUITS = [:clubs, :diamonds, :spades, :hearts]
+  VALUES = (2...14).to_a
 
-  def initialize(params = {})
-    @deck = Card::RANKS.product(Card::SUITS)
+  def initialize
+    @deck = SUITS.map do |suit|
+      VALUES.map do |value|
+        Card.new(suit, value)
+      end
+    end.flatten
   end
 
-  def shuffle
-    @deck.shuffle!
+  def deliver
+    @deck.shuffle!.pop
   end
 end

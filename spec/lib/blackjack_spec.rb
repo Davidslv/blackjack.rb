@@ -1,21 +1,33 @@
 require 'spec_helper'
-require './game/blackjack'
 
-describe BlackJack do
+require './lib/blackjack'
 
-  context "when the game starts" do
-    subject { described_class.new }
+describe Blackjack do
+  let(:game) { Blackjack.new }
 
-    its(:money) { should eql(10) }
-    its(:played_games) { should eql(0) }
-    its(:deck) { have(52).items }
+  context "Player get over 21" do
+    before do
+      game.stub(deal_dealer_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 7)]))
+      game.stub(deal_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 7)]))
+      game.stub(deal_card: Card.new(:clubs, 5))
+      game.start
+    end
+
+    it "should loose the game" do
+      game.accept_card
+      game.should_not be_won
+    end
   end
 
-  context "play the game" do
-    subject { described_class.new.play }
+  context "Player stands on 18 and dealer gets 17" do
+    before do
+      game.stub(deal_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 8)]))
+      game.stub(deal_dealer_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 7)]))
+      game.start
+    end
 
-    its(:croupier_cards) { have(2).items }
-    its(:player_cards) { have(2).items }
-    its(:deck) { have(48).items }
+    it "should win the game" do
+      game.should be_won
+    end
   end
 end
