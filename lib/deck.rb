@@ -1,6 +1,6 @@
 class Deck
-  SUITS = [:clubs, :diamonds, :spades, :hearts]
-  VALUES = (2...14).to_a
+  SUITS  = [:clubs, :diamonds, :spades, :hearts]
+  VALUES = %w(2 3 4 5 6 7 8 9 10 J Q K A)
 
   def initialize
     @deck = SUITS.map do |suit|
@@ -10,7 +10,11 @@ class Deck
     end.flatten
   end
 
-  def deliver
+  def deliver!
     @deck.shuffle!.pop
+  end
+
+  def size
+    @deck.size
   end
 end

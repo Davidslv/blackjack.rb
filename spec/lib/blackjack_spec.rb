@@ -1,11 +1,10 @@
 require 'spec_helper'
-
 require './lib/blackjack'
 
 describe Blackjack do
   let(:game) { Blackjack.new }
 
-  context "Player get over 21" do
+  context "Player gets over 21" do
     before do
       game.stub(deal_dealer_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 7)]))
       game.stub(deal_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 7)]))
@@ -14,7 +13,7 @@ describe Blackjack do
     end
 
     it "should loose the game" do
-      game.accept_card
+      game.deliver_card
       game.should_not be_won
     end
   end
@@ -28,6 +27,18 @@ describe Blackjack do
 
     it "should win the game" do
       game.should be_won
+    end
+  end
+
+  context "Player and dealer have the same points" do
+    before do
+      game.stub(deal_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 8)]))
+      game.stub(deal_dealer_hand: Hand.new([Card.new(:clubs, 10), Card.new(:spades, 8)]))
+      game.start
+    end
+
+    it "should draw the game" do
+      game.should be_draw
     end
   end
 end
